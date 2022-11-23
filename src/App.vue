@@ -74,7 +74,8 @@
               <p class="fs-5">Телефон</p>
             </div>
             <div class="col-9">
-              <input v-model="phone" class="input-site border fs-5 p-2 " type="text">
+              <p class="fs-5 text-danger" style="width: 400px">{{erPhone}}</p>
+              <input v-model="phone"  @input="validatePhone" class="input-site border fs-5 p-2 " type="text">
             </div>
           </div>
 
@@ -146,7 +147,8 @@
         <div class="row">
           <div class="col-6">
             <p class="fs-5">{{ surname }} {{name}} {{patronymic}} - {{ profession }}</p>
-            <p class="fs-5">{{ mail }} {{ phone }}</p>
+            <p class="fs-5" v-if="erPhone.length > 0">{{ mail }}</p>
+            <p class="fs-5" v-else>{{ mail }} {{ phone }}</p>
             <img :src="photo" class="photo img-fluid">
           </div>
           <div class="col-6">
@@ -172,13 +174,14 @@
 export default {
   data() {
     return {
+        erPhone: '',
       profession: 'бухгалтер',
       city: 'Чайхона',
       photo: 'https://s00.yaplakal.com/pics/pics_original/5/9/2/14163295.jpg',
       surname: 'Духанов',
       name: 'Данила',
       patronymic: 'Иванович',
-      phone: '89005553535',
+      phone: '9005553535',
       mail: 'test@mail.ru',
       bDate: '2022-11-22',
       education: 'Высшее МГЧПУ (бывш. тракторный полетный первокосмический колледж)',
@@ -189,6 +192,15 @@ export default {
     }
   },
   methods: {
+    validatePhone(){
+      this.erPhone = '';
+      if(this.phone.length <6 || this.phone.length > 10 ){
+        this.erPhone = 'Длина телефона должна быть от 6 до 10 символов.';
+      }
+      if (/\D/.test(this.phone)) {
+        this.erPhone += ' Номер должен сожержать только цифры.';
+      }
+    }
 
   }
 }
